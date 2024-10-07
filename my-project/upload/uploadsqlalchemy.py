@@ -22,3 +22,5 @@ result = exe.fetchmany(5) # top 5
 for r in result:
     print(r)
 print(f"file uploaded to: {sample_data.fullname} table")
+
+conn.close()
