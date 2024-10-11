@@ -10,6 +10,9 @@ const App = () => {
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
   const [interval, setInterval] = useState(5);
+  const [filename, setFilename] = useState('generated_data.csv');
+
+
   const [databases, setDatabases] = useState([]);
   const [selectedDatabase, setSelectedDatabase] = useState('');
   const [tables, setTables] = useState([]);
@@ -17,6 +20,7 @@ const App = () => {
   const [file, setFile] = useState(null);
   const [tableData, setTableData] = useState({ columns: [], data: [] });
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     fetchDatabases();
@@ -29,20 +33,40 @@ const App = () => {
   }, [selectedDatabase]);
 
   const fetchDatabases = async () => {
+    setLoading(true);
+    setError(null);
     try {
       const response = await axios.get('/databases');
-      setDatabases(response.data);
+      if (Array.isArray(response.data)) {
+        setDatabases(response.data);
+      } else {
+        throw new Error('Invalid response format for databases');
+      }
     } catch (error) {
       console.error('Error fetching databases:', error);
+      setError('Failed to fetch databases. Please try again later.');
+      setDatabases([]);
+    } finally {
+      setLoading(false);
     }
   };
 
   const fetchTables = async (database) => {
+    setLoading(true);
+    setError(null);
     try {
       const response = await axios.get(`/tables/${database}`);
-      setTables(response.data);
+      if (Array.isArray(response.data)) {
+        setTables(response.data);
+      } else {
+        throw new Error('Invalid response format for tables');
+      }
     } catch (error) {
       console.error('Error fetching tables:', error);
+      setError('Failed to fetch tables. Please try again later.');
+      setTables([]);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -57,7 +81,7 @@ const App = () => {
       const url = window.URL.createObjectURL(new Blob([response.data]));
       const link = document.createElement('a');
       link.href = url;
-      link.setAttribute('download', 'generated_data.csv');
+      link.setAttribute('download', filename);
       document.body.appendChild(link);
       link.click();
     } catch (error) {
@@ -118,6 +142,11 @@ const App = () => {
         </Toolbar>
       </AppBar>
       <Container maxWidth="lg" style={{ marginTop: '2rem' }}>
+        {error && (
+          <Paper style={{ padding: '1rem', marginBottom: '1rem', backgroundColor: '#ffebee' }}>
+            <Typography color="error">{error}</Typography>
+          </Paper>
+        )}
         <Grid container spacing={3}>
           <Grid item xs={12} md={6}>
             <Paper style={{ padding: '1rem' }}>
@@ -148,6 +177,14 @@ const App = () => {
                 fullWidth
                 margin="normal"
               />
+              <TextField
+                label="Filename"
+                type="text"
+                value={filename}
+                onChange={(e) => setFilename(e.target.value)}
+                fullWidth
+                margin="normal"
+              />
               <Button variant="contained" color="primary" onClick={handleGenerateCSV} disabled={loading}>
                 Generate and Download CSV
               </Button>
@@ -160,7 +197,7 @@ const App = () => {
               <FormControl fullWidth margin="normal">
                 <InputLabel>Database</InputLabel>
                 <Select value={selectedDatabase} onChange={(e) => setSelectedDatabase(e.target.value)}>
-                  {databases.map((db) => (
+                  {Array.isArray(databases) && databases.map((db) => (
                     <MenuItem key={db} value={db}>{db}</MenuItem>
                   ))}
                 </Select>
@@ -168,7 +205,7 @@ const App = () => {
               <FormControl fullWidth margin="normal">
                 <InputLabel>Table</InputLabel>
                 <Select value={selectedTable} onChange={(e) => setSelectedTable(e.target.value)}>
-                  {tables.map((table) => (
+                  {Array.isArray(tables) && tables.map((table) => (
                     <MenuItem key={table} value={table}>{table}</MenuItem>
                   ))}
                 </Select>
