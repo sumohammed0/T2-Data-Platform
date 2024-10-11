@@ -30,6 +30,7 @@ def generate_csv(filename, start_date, end_date, interval, columns):
             writer.writerow(row)
             current_date += timedelta(minutes=interval)
 def main():
+    print("GENERATING DATA")
     parser = argparse.ArgumentParser(description="Generate a CSV file with 5G core network data.")
     parser.add_argument('filename', help="Output CSV filename")
     parser.add_argument('--start', required=True, help="Start date (YYYY-MM-DD HH:MM)")
