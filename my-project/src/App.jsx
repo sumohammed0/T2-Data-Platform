@@ -9,7 +9,7 @@ const App = () => {
       <div className="min-h-screen flex flex-col">
           <nav className="bg-white shadow dark:bg-gray-800">
             <div className="container flex items-center justify-between p-6 mx-auto text-gray-600 capitalize dark:text-gray-300">
-              <h1 className="text-2xl font-bold">CSV to Database App</h1>
+              <h1 className="text-2xl font-bold">Data Ingestion App</h1>
               <ul className="flex space-x-4 mt-2">
                 <li>
                   <NavLink 
