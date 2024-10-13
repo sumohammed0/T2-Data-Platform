@@ -1,5 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes, NavLink } from 'react-router-dom';
+import CSVUploader from './components/CSVUploader';
+import DestinationSelector from './components/DbSelector';
 
 const App = () => {
   return (
@@ -52,7 +54,7 @@ const App = () => {
         <main className="flex-grow w-screen p-4">
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/upload" element={<UploadCSV />} />
+            <Route path="/upload" element={<CSVUploader />} />
             <Route path="/databases" element={<ManageDatabases />} />
           </Routes>
         </main>
@@ -67,7 +69,6 @@ const App = () => {
 
 // Placeholder components for routes
 const Home = () => <h2>Welcome to CSV to Database App</h2>;
-const UploadCSV = () => <h2>Upload CSV File</h2>;
 const ManageDatabases = () => <h2>Manage Databases</h2>;
 
 export default App;

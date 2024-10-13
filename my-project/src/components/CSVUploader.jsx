@@ -1,76 +1,19 @@
 import React, { useState } from 'react';
+import DestinationSelector from './DbSelector';
 
 const CSVUploader = () => {
-  const [file, setFile] = useState(null);
-  const [data, setData] = useState([]);
-
-  const handleFileChange = (event) => {
-    setFile(event.target.files[0]);
-  };
-
-  const handleUpload = async () => {
-    if (!file) {
-      alert('Please select a file first!');
-      return;
-    }
-
-    const formData = new FormData();
-    formData.append('file', file);
-
-    try {
-      const response = await fetch('http://localhost:8000/upload-csv', {
-        method: 'POST',
-        body: formData,
-      });
-
-      if (response.ok) {
-        const result = await response.json();
-        setData(result.data);
-      } else {
-        alert('Error uploading file');
-      }
-    } catch (error) {
-      console.error('Error:', error);
-      alert('Error uploading file');
-    }
-  };
 
   return (
-    <div className="p-[20px]">
-      <h1 className="mb-[16px] font-bold text-2xl">CSV Uploader</h1>
-      <input
-        type="file"
-        onChange={handleFileChange}
-        accept=".csv"
-        className="mb-[16px]"
-      />
-      <button 
-        onClick={handleUpload} 
-        className='mb-[16px] p-[8px] bg-cyan-700 text-white'
-      >
-        Upload CSV
-      </button>
-      
-      {data.length > 0 && (
-        <table style={{ borderCollapse: 'collapse', width: '100%' }}>
-          <thead>
-            <tr>
-              {Object.keys(data[0]).map((header) => (
-                <th key={header} className="border border-solid border-white p-2 bg-cyan-700">{header}</th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {data.map((row, index) => (
-              <tr key={index}>
-                {Object.values(row).map((value, i) => (
-                  <td key={i} style={{ border: '1px solid #ddd', padding: '8px' }}>{value}</td>
-                ))}
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      )}
+    <div>
+        <label for="dropzone-file" class="flex flex-col items-center w-full max-w-lg p-5 mx-auto mt-2 text-center bg-white border-2 border-gray-300 border-dashed cursor-pointer dark:bg-gray-900 dark:border-gray-700 rounded-xl">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8 text-gray-500 dark:text-gray-400">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 16.5V9.75m0 0l3 3m-3-3l-3 3M6.75 19.5a4.5 4.5 0 01-1.41-8.775 5.25 5.25 0 0110.233-2.33 3 3 0 013.758 3.848A3.752 3.752 0 0118 19.5H6.75z" />
+            </svg>
+            <h2 class="mt-1 font-medium tracking-wide text-gray-700 dark:text-gray-200">Upload CSV File</h2>
+            <p class="mt-2 text-xs tracking-wide text-gray-500 dark:text-gray-400">Upload or drag & drop your CSV data file. </p>
+            <input id="dropzone-file" type="file" class="hidden" />
+        </label>
+        <DestinationSelector/>
     </div>
   );
 };
