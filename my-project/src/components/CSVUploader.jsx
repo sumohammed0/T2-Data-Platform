@@ -127,9 +127,9 @@ const CSVUploader = () => {
 
       <button
         onClick={handleUpload}
-        className="mt-4 px-4 py-2 bg-cyan-700 text-white rounded hover:bg-cyan-800 transition-colors"
+        className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
       >
-        Upload CSV
+        Upload File to Database
       </button>
 
       {data.length > 0 && (
