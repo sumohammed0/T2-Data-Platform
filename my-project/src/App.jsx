@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes, NavLink } from 'react-router-dom';
 import CSVUploader from './components/CSVUploader';
-import DestinationSelector from './components/DbSelector';
+import DestinationSelector from './components/DestinationSelector';
 
 const App = () => {
   return (
@@ -60,7 +60,7 @@ const App = () => {
         </main>
 
         <footer className="bg-gray-200 p-4 text-center w-screen">
-          <p>2024 Team 2- Data Ingestion</p>
+          <p>2024 Team 2: Data Ingestion</p>
         </footer>
       </div>
     </Router>
