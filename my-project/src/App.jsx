@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes, NavLink } from 'react-router-dom';
 import CSVUploader from './components/CSVUploader';
+import DatabasePage from './components/DatabasePage';
 import DestinationSelector from './components/DestinationSelector';
 
 const App = () => {
@@ -55,7 +56,7 @@ const App = () => {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/upload" element={<CSVUploader />} />
-            <Route path="/databases" element={<ManageDatabases />} />
+            <Route path="/databases" element={<DatabasePage />} />
           </Routes>
         </main>
 
@@ -69,6 +70,5 @@ const App = () => {
 
 // Placeholder components for routes
 const Home = () => <h2>Welcome to CSV to Database App</h2>;
-const ManageDatabases = () => <h2>Manage Databases</h2>;
 
 export default App;

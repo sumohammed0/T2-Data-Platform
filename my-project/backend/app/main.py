@@ -47,6 +47,21 @@ def list_tables(database_id: int, db: Session = Depends(get_db)):
     
     return tables
 
+@app.get("/table-data/{database_id}/{table_name}")
+def get_table_data(database_id: int, table_name: str, db: Session = Depends(get_db)):
+    database = db.query(models.Database).filter(models.Database.id == database_id).first()
+    if not database:
+        raise HTTPException(status_code=404, detail="Database not found")
+    
+    engine = create_engine(database.connection_string)
+    try:
+        df = pd.read_sql_table(table_name, engine)
+        return df.to_dict(orient="records")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+    
+
+
 @app.post("/upload-csv")
 async def upload_csv(
     file: UploadFile = File(...),
