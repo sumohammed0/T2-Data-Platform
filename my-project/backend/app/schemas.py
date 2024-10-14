@@ -1,4 +1,5 @@
 from pydantic import BaseModel
+from typing import List
 
 class DatabaseBase(BaseModel):
     name: str
@@ -12,3 +13,10 @@ class Database(DatabaseBase):
 
     class Config:
         orm_mode = True
+
+class CSVUploadResponse(BaseModel):
+    message: str
+    database: str
+    table: str
+    rows: int
+    columns: List[str]

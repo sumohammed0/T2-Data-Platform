@@ -1,40 +1,32 @@
 from fastapi import FastAPI, UploadFile, File, Depends, HTTPException, Form
 from fastapi.middleware.cors import CORSMiddleware
+from sqlalchemy import create_engine, MetaData, Table, Column, String, Integer, Float, inspect
 from sqlalchemy.orm import Session
-from . import models
-from . import schemas
-from .database import engine, get_db
+from sqlalchemy.exc import SQLAlchemyError
+from . import models, schemas
+from .database import engine, get_db, SQLALCHEMY_DATABASE_URL
 import pandas as pd
 import io
+import os
 
 models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 
-# CORS middleware makes sure communication is working across front end port 5173 and backend port 8000
+# Updated CORS middleware configuration
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],  #React app's URL
+    allow_origins=["http://localhost:5173"],  # Add any other origins if needed
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
+    expose_headers=["*"],
 )
 
-
-
-#csv File upload
-@app.post("/upload-csv")
-async def upload_csv(file: UploadFile = File(...)):
-    contents = await file.read()
-    df = pd.read_csv(io.StringIO(contents.decode('utf-8')))
-    return {"data": df.to_dict(orient="records")}
-
-#databases
 @app.get("/databases", response_model=list[schemas.Database])
 def list_databases(db: Session = Depends(get_db)):
     return db.query(models.Database).all()
 
-#create new database entry
 @app.post("/databases", response_model=schemas.Database)
 def create_database(database: schemas.DatabaseCreate, db: Session = Depends(get_db)):
     db_database = models.Database(**database.dict())
@@ -42,3 +34,58 @@ def create_database(database: schemas.DatabaseCreate, db: Session = Depends(get_
     db.commit()
     db.refresh(db_database)
     return db_database
+
+@app.get("/tables/{database_id}")
+def list_tables(database_id: int, db: Session = Depends(get_db)):
+    database = db.query(models.Database).filter(models.Database.id == database_id).first()
+    if not database:
+        raise HTTPException(status_code=404, detail="Database not found")
+    
+    engine = create_engine(database.connection_string)
+    inspector = inspect(engine)
+    tables = inspector.get_table_names()
+    
+    return tables
+
+@app.post("/upload-csv")
+async def upload_csv(
+    file: UploadFile = File(...),
+    database_name: str = Form(...),
+    table_name: str = Form(...),
+    db: Session = Depends(get_db)
+):
+    try:
+        contents = await file.read()
+        df = pd.read_csv(io.StringIO(contents.decode('utf-8')))
+        
+        # Check if the database exists, if not create it
+        database = db.query(models.Database).filter(models.Database.name == database_name).first()
+        if not database:
+            new_db_path = f"{database_name}.sqlite"
+            new_db_url = f"sqlite:///{new_db_path}"
+            database = models.Database(name=database_name, connection_string=new_db_url)
+            db.add(database)
+            db.commit()
+            db.refresh(database)
+        
+        # Create a new engine for the selected database
+        target_engine = create_engine(database.connection_string)
+        
+        # Create the table if it doesn't exist
+        metadata = MetaData()
+        columns = [Column(name, String) for name in df.columns]
+        table = Table(table_name, metadata, *columns)
+        metadata.create_all(target_engine)
+        
+        # Insert data into the table
+        df.to_sql(table_name, target_engine, if_exists='replace', index=False)
+        
+        return {
+            "message": "CSV uploaded and processed successfully",
+            "database": database_name,
+            "table": table_name,
+            "rows": len(df),
+            "columns": list(df.columns)
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))

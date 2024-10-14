@@ -8,6 +8,7 @@ const CSVUploader = () => {
   const [tableOptions, setTableOptions] = useState([]);
   const [selectedTable, setSelectedTable] = useState(null);
   const [databaseOptions, setDatabaseOptions] = useState([]);
+  const [uploadResult, setUploadResult] = useState(null);
 
   useEffect(() => {
     fetchDatabases();
@@ -28,20 +29,32 @@ const CSVUploader = () => {
     }
   };
 
+  const fetchTables = async (databaseId) => {
+    try {
+      const response = await fetch(`http://localhost:8000/tables/${databaseId}`);
+      if (response.ok) {
+        const tables = await response.json();
+        const options = tables.map(table => ({ label: table, value: table }));
+        setTableOptions(options);
+      } else {
+        console.error('Failed to fetch tables');
+      }
+    } catch (error) {
+      console.error('Error fetching tables:', error);
+    }
+  };
+
   const handleFileChange = (event) => {
     setFile(event.target.files[0]);
   };
 
   const handleDatabaseSelect = (db) => {
     setSelectedDatabase(db);
-    // For now, just simulate fetching corresponding table options
-    const tables = db
-      ? [
-          { label: `${db.label}_table1`, value: `${db.value}_table1` },
-          { label: `${db.label}_table2`, value: `${db.value}_table2` },
-        ]
-      : [];
-    setTableOptions(tables);
+    if (db && db.value) {
+      fetchTables(db.value);
+    } else {
+      setTableOptions([]);
+    }
   };
 
   const handleTableSelect = (table) => {
@@ -56,25 +69,34 @@ const CSVUploader = () => {
 
     const formData = new FormData();
     formData.append('file', file);
-    formData.append('database_id', selectedDatabase.value);
-    formData.append('table_name', selectedTable.value);
+    formData.append('database_name', selectedDatabase.label);
+    formData.append('table_name', selectedTable.label);
 
     try {
       const response = await fetch('http://localhost:8000/upload-csv', {
         method: 'POST',
         body: formData,
+        credentials: 'include',  // Include credentials if your backend requires it
       });
 
+      const result = await response.json();
+
       if (response.ok) {
-        const result = await response.json();
-        setData(result.data);
+        setUploadResult(result);
+        setData([]); // Clear previous data
         alert('File uploaded successfully!');
+        // Refresh databases and tables
+        fetchDatabases();
+        if (selectedDatabase && selectedDatabase.value) {
+          fetchTables(selectedDatabase.value);
+        }
       } else {
-        alert('Error uploading file');
+        console.error('Error response:', result);
+        alert(`Error uploading file: ${result.detail || 'Unknown error'}`);
       }
     } catch (error) {
-      console.error('Error:', error);
-      alert('Error uploading file');
+      console.error('Fetch error:', error);
+      alert('Error uploading file. Please check the console for details.');
     }
   };
 
@@ -111,16 +133,14 @@ const CSVUploader = () => {
 
       {file && <p className="mt-2 text-sm text-gray-600">Selected file: {file.name}</p>}
 
-      {/* Database Dropdown */}
       <DestinationSelector
-        title="Select Destination Database:"
+        title="Select or Create Destination Database:"
         defaultOptions={databaseOptions}
         onSelect={handleDatabaseSelect}
       />
 
-      {/* Table Dropdown */}
       <DestinationSelector
-        title={`Select Table from ${selectedDatabase?.label || 'Database'}:`}
+        title={`Select or Create Table in ${selectedDatabase?.label || 'Database'}:`}
         defaultOptions={tableOptions}
         onSelect={handleTableSelect}
       />
@@ -132,33 +152,14 @@ const CSVUploader = () => {
         Upload File to Database
       </button>
 
-      {data.length > 0 && (
+      {uploadResult && (
         <div className="mt-8">
-          <h2 className="mb-4 text-xl font-semibold">Uploaded Data Preview</h2>
-          <div className="overflow-x-auto">
-            <table className="min-w-full bg-white border border-gray-300">
-              <thead>
-                <tr className="bg-gray-100">
-                  {Object.keys(data[0]).map((header) => (
-                    <th key={header} className="px-4 py-2 text-left text-sm font-semibold text-gray-600 uppercase tracking-wider">
-                      {header}
-                    </th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {data.map((row, index) => (
-                  <tr key={index} className={index % 2 === 0 ? 'bg-gray-50' : 'bg-white'}>
-                    {Object.values(row).map((value, i) => (
-                      <td key={i} className="px-4 py-2 text-sm text-gray-800 border-t border-gray-300">
-                        {value}
-                      </td>
-                    ))}
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+          <h2 className="mb-4 text-xl font-semibold">Upload Result</h2>
+          <p>Message: {uploadResult.message}</p>
+          <p>Database: {uploadResult.database}</p>
+          <p>Table: {uploadResult.table}</p>
+          <p>Rows: {uploadResult.rows}</p>
+          <p>Columns: {uploadResult.columns.join(', ')}</p>
         </div>
       )}
     </div>
