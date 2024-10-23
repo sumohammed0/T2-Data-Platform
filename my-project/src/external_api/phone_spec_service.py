@@ -14,4 +14,3 @@ class PhoneSpecService:
         except Exception as e:
             print(f"Error fetching phone specs: {e}")
             return None
-print("Testing external API integration!")

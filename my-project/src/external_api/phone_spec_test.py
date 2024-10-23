@@ -1,9 +1,9 @@
 import unittest
 from unittest.mock import patch
-from src.external_api.phone_spec_client import PhoneSpecApiClient
+from .phone_spec_client import PhoneSpecApiClient
 
 class TestPhoneSpecApiClient(unittest.TestCase):
-
+    #comment to test
     @patch('requests.get')
     def test_get_phone_specs_success(self, mock_get):
         mock_response = {

@@ -22,5 +22,3 @@ class ApiClient(ABC):
     def delete(self, endpoint: str) -> dict:
         """Send a DELETE request to the API."""
         pass
-
-print("Testing external API integration!")

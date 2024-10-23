@@ -35,4 +35,3 @@ class PhoneSpecApiClient(ApiClient):
             return response.json()
         else:
             raise Exception(f"API request failed with status code {response.status_code}: {response.text}")
-print("Testing external API integration!")
