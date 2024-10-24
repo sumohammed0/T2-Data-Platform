@@ -1,6 +1,7 @@
 import sqlite3
 
 def init_db():
+    """Create the database and phones table if they don't exist."""
     conn = sqlite3.connect("phones.db")
     cursor = conn.cursor()
     cursor.execute("""
@@ -14,6 +15,7 @@ def init_db():
     conn.close()
 
 def insert_phone(brand, model):
+    """Insert a phone brand and model into the database."""
     conn = sqlite3.connect("phones.db")
     cursor = conn.cursor()
     cursor.execute("""
@@ -23,6 +25,7 @@ def insert_phone(brand, model):
     conn.close()
 
 def get_all_phones():
+    """Retrieve all phones from the database."""
     conn = sqlite3.connect("phones.db")
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM phones")
