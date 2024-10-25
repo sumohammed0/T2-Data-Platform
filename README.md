@@ -7,3 +7,7 @@ Steps to upload csv file and display csv data
 4. upload a csv file 
 5. select/create database and table
 5. result will be displayed on screen
+
+
+
+Steps to run Phone Spec Backend:

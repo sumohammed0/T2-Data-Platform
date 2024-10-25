@@ -1,10 +1,20 @@
 from fastapi import FastAPI, HTTPException
-from phone_spec_db import init_db, insert_phone, get_all_phones
-from api_integration import PhoneSpecAPI
+from .phone_spec_db import init_db, insert_phone, get_all_phones
+from .api_integration import PhoneSpecAPI
 import requests
+from fastapi.middleware.cors import CORSMiddleware
+
 
 # Initialize FastAPI app and database
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173"],  # Vite development server
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 init_db()
 
 # Initialize the PhoneSpecAPI client
