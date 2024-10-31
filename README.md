@@ -11,3 +11,6 @@ Steps to upload csv file and display csv data
 
 
 Steps to run Phone Spec Backend:
+run this command : uvicorn backend.external_api_integration.phone_spec_service:app --reload
+
+to start front end:
