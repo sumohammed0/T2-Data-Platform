@@ -1,5 +1,4 @@
 import React from 'react';
-import { Auth0Provider } from "@auth0/auth0-react";
 import { BrowserRouter as Router, Route, Routes, NavLink } from 'react-router-dom';
 import Home from './components/Home';
 import Navbar from './components/Navbar';
@@ -9,18 +8,7 @@ import PhoneSpecsApp from './components/PhoneSpecsApp';
 import PhoneTable from './components/PhoneTable';
 
 const App = () => {
-  const domain = "dev-2ps4vfgtgwb7tb4x.us.auth0.com";
-  const clientId = "PKRqCrdNE8iBPgO96ONJ64NZTa5ILiTG";
-
   return (
-    <Auth0Provider
-      domain={domain}
-      clientId={clientId}
-      authorizationParams={{
-        audience: "https://dev-2ps4vfgtgwb7tb4x.us.auth0.com/api/v2/",
-        redirect_uri: window.location.origin + "/callback",
-      }}
-    >
       <Router>
         <div className="min-h-screen flex flex-col">
           <nav className="bg-white shadow dark:bg-gray-800">
@@ -106,7 +94,6 @@ const App = () => {
           </footer>
         </div>
       </Router>
-    </Auth0Provider>
   );
 };
 
