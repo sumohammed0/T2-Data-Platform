@@ -14,9 +14,6 @@ def create_introspector(source_type: str, **kwargs) -> DataIntrospector:
     
     Returns:
         DataIntrospector: Appropriate introspector instance
-    
-    Raises:
-        ValueError: If source_type is not supported or required parameters are missing
     """
     if source_type == 'csv':
         if 'directory_path' not in kwargs:

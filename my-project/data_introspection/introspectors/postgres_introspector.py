@@ -1,21 +1,9 @@
 import psycopg2
-from .base import DataIntrospector, TableMetadata
 from typing import List, Dict
+from .base import DataIntrospector, TableMetadata
 
 class PostgresIntrospector(DataIntrospector):
-    """Introspector for PostgreSQL databases."""
-    
     def __init__(self, dbname: str, user: str, password: str, host: str, port: str = "5432"):
-        """
-        Initialize PostgreSQL introspector.
-        
-        Args:
-            dbname (str): Database name
-            user (str): Username
-            password (str): Password
-            host (str): Host address
-            port (str): Port number (default: "5432")
-        """
         self.connection_params = {
             "dbname": dbname,
             "user": user,
@@ -23,11 +11,9 @@ class PostgresIntrospector(DataIntrospector):
             "host": host,
             "port": port
         }
-        # Verify connection
         self.validate_structure()
     
     def get_table_names(self) -> List[str]:
-        """Get list of tables in PostgreSQL database."""
         with psycopg2.connect(**self.connection_params) as conn:
             cursor = conn.cursor()
             cursor.execute("""
@@ -39,19 +25,9 @@ class PostgresIntrospector(DataIntrospector):
             return [row[0] for row in cursor.fetchall()]
     
     def get_table_metadata(self, table_name: str) -> TableMetadata:
-        """
-        Get metadata for a PostgreSQL table.
-        
-        Args:
-            table_name (str): Name of the table
-            
-        Returns:
-            TableMetadata: Metadata about the table
-        """
         with psycopg2.connect(**self.connection_params) as conn:
             cursor = conn.cursor()
             
-            # Verify table exists
             cursor.execute("""
                 SELECT EXISTS (
                     SELECT FROM information_schema.tables 
@@ -62,7 +38,6 @@ class PostgresIntrospector(DataIntrospector):
             if not cursor.fetchone()[0]:
                 raise ValueError(f"Table does not exist: {table_name}")
             
-            # Get column information
             cursor.execute("""
                 SELECT column_name, data_type
                 FROM information_schema.columns
@@ -76,7 +51,6 @@ class PostgresIntrospector(DataIntrospector):
                 for row in cursor.fetchall()
             ]
             
-            # Get row count
             cursor.execute(f"SELECT COUNT(*) FROM {table_name};")
             row_count = cursor.fetchone()[0]
             
@@ -87,10 +61,6 @@ class PostgresIntrospector(DataIntrospector):
             )
     
     def validate_structure(self) -> bool:
-        """
-        Validate PostgreSQL database structure.
-        Returns True if database is accessible.
-        """
         try:
             with psycopg2.connect(**self.connection_params) as conn:
                 cursor = conn.cursor()
