@@ -8,6 +8,22 @@ from .database import engine, get_db, SQLALCHEMY_DATABASE_URL
 import pandas as pd
 import io
 import os
+from dotenv import load_dotenv
+import boto3
+
+load_dotenv('.env.local') 
+
+AWS_S3_BUCKET_NAME = 'senior-design-utd' 
+AWS_REGION = 'us-east-1'
+AWS_ACCESS_KEY = os.getenv('AWS_ACCCES_KEY') # from IAM user
+AWS_SECRET_KEY = os.getenv('AWS_SECRET_ACCESS_KEY') # from IAM user
+
+s3_client = boto3.client(
+        service_name='s3',
+        region_name=AWS_REGION,
+        aws_access_key_id=AWS_ACCESS_KEY,
+        aws_secret_access_key=AWS_SECRET_KEY
+    )
 
 models.Base.metadata.create_all(bind=engine)
 
@@ -71,6 +87,10 @@ async def upload_csv(
 ):
     try:
         contents = await file.read()
+        
+        if file: 
+            upload_response = s3_client.upload_fileobj(file.file, AWS_S3_BUCKET_NAME, file.filename)
+
         df = pd.read_csv(io.StringIO(contents.decode('utf-8')))
         
         # Check if the database exists, if not create it
