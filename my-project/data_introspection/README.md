@@ -7,12 +7,12 @@ A Python module for inspecting and retrieving metadata from various data sources
 
 1. Ensure you have the required dependencies:
 ```bash
-pip install pandas psycopg2-binary
+pip install pandas>=1.5.0 psycopg2-binary>=2.9.0
 ```
+2. Install the module directly from our repository:
 
-2. Import the module in your project:
-```python
-from data_introspection import create_introspector
+```bash
+pip install git+https://github.com/sumohammed0/T2-Data-Platform
 ```
 
 ## Quick Start
@@ -27,7 +27,7 @@ tables = inspector.get_table_names()
 print(f"Available tables: {tables}")
 
 # Get metadata for a specific CSV file
-metadata = inspector.get_table_metadata('sales_data')
+metadata = inspector.get_table_metadata('5G_data')
 print(f"Table name: {metadata.name}")
 print(f"Number of rows: {metadata.row_count}")
 print("Columns:")
@@ -178,16 +178,3 @@ for table in inspector.get_table_names():
    - Ensure PostgreSQL server is running
    - Check network connectivity
    - Verify user has necessary permissions
-
-## Support
-
-For issues, questions, or suggestions:
-1. Contact the Data Ingestion team
-2. Submit an issue through internal ticketing system
-3. Email: data-ingestion@company.com (replace with actual contact)
-```
-
-You can now paste this directly into your README.md file. Make sure to:
-1. Update the email/contact information
-2. Add any specific team conventions
-3. Modify paths and examples as needed for your environment
