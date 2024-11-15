@@ -1,8 +1,8 @@
-Data Introspection Module
+## Data Introspection Module
 
 A Python module for inspecting and retrieving metadata from various data sources including CSV files, SQLite databases, and PostgreSQL databases. This module provides a unified interface for accessing data structure information across different sources.
 
-Installation
+## Installation
 
 1. Ensure you have the required dependencies:
 ```bash
