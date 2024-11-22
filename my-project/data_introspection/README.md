@@ -43,7 +43,7 @@ inspector = create_introspector('sqlite', db_path='/path/to/database.db')
 tables = inspector.get_table_names()
 
 # Get metadata for a specific table
-metadata = inspector.get_table_metadata('users')
+metadata = inspector.get_table_metadata('')
 ```
 
 ### PostgreSQL Database
