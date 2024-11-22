@@ -10,35 +10,94 @@ import io
 import os
 from dotenv import load_dotenv
 import boto3
+import requests
+from datetime import datetime
+from pydantic import BaseModel
+from typing import Dict, Any
 
+# Load environment variables
 load_dotenv('.env.local') 
 
+# AWS Configuration
 AWS_S3_BUCKET_NAME = 'senior-design-utd' 
 AWS_REGION = 'us-east-1'
 AWS_ACCESS_KEY = os.getenv('AWS_ACCCES_KEY') # from IAM user
 AWS_SECRET_KEY = os.getenv('AWS_SECRET_ACCESS_KEY') # from IAM user
 
 s3_client = boto3.client(
-        service_name='s3',
-        region_name=AWS_REGION,
-        aws_access_key_id=AWS_ACCESS_KEY,
-        aws_secret_access_key=AWS_SECRET_KEY
-    )
+    service_name='s3',
+    region_name=AWS_REGION,
+    aws_access_key_id=AWS_ACCESS_KEY,
+    aws_secret_access_key=AWS_SECRET_KEY
+)
 
+# Create database tables
 models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 
-# Updated CORS middleware configuration
+# CORS middleware configuration
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],  # Add any other origins if needed
+    allow_origins=["http://localhost:5173"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
     expose_headers=["*"],
 )
 
+# API Integration Models
+class APIRequest(BaseModel):
+    endpoint: str
+    method: str
+    headers: Dict[str, str] = {}
+    params: Dict[str, str] = {}
+
+class APIIntegrationService:
+    def execute_request(self, config: APIRequest) -> Dict[str, Any]:
+        try:
+            # Make the HTTP request
+            response = requests.request(
+                method=config.method,
+                url=config.endpoint,
+                headers=config.headers,
+                params=config.params,
+                timeout=30
+            )
+            
+            # Try to parse response as JSON
+            try:
+                response_data = response.json()
+            except ValueError:
+                response_data = response.text
+            
+            return {
+                "status": "success",
+                "statusCode": response.status_code,
+                "data": response_data,
+                "timestamp": datetime.now().isoformat()
+            }
+                
+        except requests.exceptions.RequestException as e:
+            # Handle request-related errors
+            error_message = str(e)
+            if "SSLError" in error_message:
+                error_message = "SSL Error - Could not verify the API endpoint's security certificate"
+            elif "ConnectionError" in error_message:
+                error_message = "Connection Error - Could not reach the API endpoint"
+            elif "Timeout" in error_message:
+                error_message = "Timeout Error - The API request took too long to respond"
+            
+            return {
+                "status": "error",
+                "message": error_message,
+                "timestamp": datetime.now().isoformat()
+            }
+
+# Initialize API service
+api_integration_service = APIIntegrationService()
+
+# Existing endpoints
 @app.get("/databases", response_model=list[schemas.Database])
 def list_databases(db: Session = Depends(get_db)):
     return db.query(models.Database).all()
@@ -75,8 +134,6 @@ def get_table_data(database_id: int, table_name: str, db: Session = Depends(get_
         return df.to_dict(orient="records")
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
-    
-
 
 @app.post("/upload-csv")
 async def upload_csv(
@@ -127,3 +184,16 @@ async def upload_csv(
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+# New API Integration endpoint
+@app.post("/test-api")
+async def test_api(request: APIRequest):
+    result = api_integration_service.execute_request(request)
+    
+    if result["status"] == "error":
+        raise HTTPException(
+            status_code=400,
+            detail=result["message"]
+        )
+    
+    return result
