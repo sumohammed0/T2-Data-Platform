@@ -12,13 +12,13 @@ const ManageDatabases = () => {
       {/* Toggle buttons to switch between viewing and managing */}
       <div className="flex space-x-4 mb-6">
         <button
-          className={`px-4 py-2 rounded ${activeTab === 'view' ? 'bg-blue-500 text-white' : 'bg-gray-200 text-black'}`}
+          className={`px-4 py-2 rounded ${activeTab === 'view' ? 'bg-indigo-500 text-white' : 'bg-gray-200 text-black'}`}
           onClick={() => setActiveTab('view')}
         >
           View Databases
         </button>
         <button
-          className={`px-4 py-2 rounded ${activeTab === 'manage' ? 'bg-blue-500 text-white' : 'bg-gray-200 text-black'}`}
+          className={`px-4 py-2 rounded ${activeTab === 'manage' ? 'bg-indigo-500 text-white' : 'bg-gray-200 text-black'}`}
           onClick={() => setActiveTab('manage')}
         >
           Manage Databases

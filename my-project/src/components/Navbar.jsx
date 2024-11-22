@@ -13,8 +13,8 @@ const Navbar = () => {
               to="/"
               className={({ isActive }) =>
                 isActive
-                  ? "text-gray-800 dark:text-gray-200 border-b-2 border-blue-500 mx-1.5 sm:mx-6"
-                  : "border-b-2 border-transparent hover:text-gray-800 transition-colors duration-300 transform dark:hover:text-gray-200 hover:border-blue-500 mx-1.5 sm:mx-6"
+                  ? "text-gray-800 dark:text-gray-200 border-b-2 border-indigo-500 mx-1.5 sm:mx-6"
+                  : "border-b-2 border-transparent hover:text-gray-800 transition-colors duration-300 transform dark:hover:text-gray-200 hover:border-indigo-500 mx-1.5 sm:mx-6"
               }
             >
               Home
@@ -25,8 +25,8 @@ const Navbar = () => {
               to="/upload"
               className={({ isActive }) =>
                 isActive
-                  ? "text-gray-800 dark:text-gray-200 border-b-2 border-blue-500 mx-1.5 sm:mx-6"
-                  : "border-b-2 border-transparent hover:text-gray-800 transition-colors duration-300 transform dark:hover:text-gray-200 hover:border-blue-500 mx-1.5 sm:mx-6"
+                  ? "text-gray-800 dark:text-gray-200 border-b-2 border-indigo-500 mx-1.5 sm:mx-6"
+                  : "border-b-2 border-transparent hover:text-gray-800 transition-colors duration-300 transform dark:hover:text-gray-200 hover:border-indigo-500 mx-1.5 sm:mx-6"
               }
             >
               Upload CSV
@@ -37,8 +37,8 @@ const Navbar = () => {
               to="/databases"
               className={({ isActive }) =>
                 isActive
-                  ? "text-gray-800 dark:text-gray-200 border-b-2 border-blue-500 mx-1.5 sm:mx-6"
-                  : "border-b-2 border-transparent hover:text-gray-800 transition-colors duration-300 transform dark:hover:text-gray-200 hover:border-blue-500 mx-1.5 sm:mx-6"
+                  ? "text-gray-800 dark:text-gray-200 border-b-2 border-indigo-500 mx-1.5 sm:mx-6"
+                  : "border-b-2 border-transparent hover:text-gray-800 transition-colors duration-300 transform dark:hover:text-gray-200 hover:border-indigo-500 mx-1.5 sm:mx-6"
               }
             >
               Manage Databases
@@ -49,8 +49,8 @@ const Navbar = () => {
               to="/phone-specs"
               className={({ isActive }) =>
                 isActive
-                  ? "text-gray-800 dark:text-gray-200 border-b-2 border-blue-500 mx-1.5 sm:mx-6"
-                  : "border-b-2 border-transparent hover:text-gray-800 transition-colors duration-300 transform dark:hover:text-gray-200 hover:border-blue-500 mx-1.5 sm:mx-6"
+                  ? "text-gray-800 dark:text-gray-200 border-b-2 border-indigo-500 mx-1.5 sm:mx-6"
+                  : "border-b-2 border-transparent hover:text-gray-800 transition-colors duration-300 transform dark:hover:text-gray-200 hover:border-indigo-500 mx-1.5 sm:mx-6"
               }
             >
               Phone Specs

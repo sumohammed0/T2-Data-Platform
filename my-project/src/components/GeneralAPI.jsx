@@ -102,19 +102,19 @@ const GeneralAPI = () => {
         <div className="mb-4">
           <div className="flex gap-4 mb-4">
             <button
-              className={`px-4 py-2 rounded ${activeTab === 'configure' ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}
+              className={`px-4 py-2 rounded ${activeTab === 'configure' ? 'bg-indigo-500 text-white' : 'bg-gray-200'}`}
               onClick={() => setActiveTab('configure')}
             >
               Configure
             </button>
             <button
-              className={`px-4 py-2 rounded ${activeTab === 'response' ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}
+              className={`px-4 py-2 rounded ${activeTab === 'response' ? 'bg-indigo-500 text-white' : 'bg-gray-200'}`}
               onClick={() => setActiveTab('response')}
             >
               Response
             </button>
             <button
-              className={`px-4 py-2 rounded ${activeTab === 'logs' ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}
+              className={`px-4 py-2 rounded ${activeTab === 'logs' ? 'bg-indigo-500 text-white' : 'bg-gray-200'}`}
               onClick={() => setActiveTab('logs')}
             >
               Logs
@@ -223,7 +223,7 @@ const GeneralAPI = () => {
               </div>
 
               <button
-                className={`w-full py-2 rounded text-white ${loading ? 'bg-blue-300' : 'bg-blue-500 hover:bg-blue-600'}`}
+                className={`w-full py-2 rounded text-white ${loading ? 'bg-indigo-300' : 'bg-indigo-500 hover:bg-indigo-600'}`}
                 onClick={handleTest}
                 disabled={loading}
               >

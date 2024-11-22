@@ -37,7 +37,7 @@ const LatestPhones = ({ phones }) => {
             <div className="p-4 bg-gray-50 border-t">
               <Link
                 to={`/phone/${phone.slug}`}
-                className="block w-full text-center py-2 px-4 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors duration-300"
+                className="block w-full text-center py-2 px-4 bg-indigo-500 text-white rounded-md hover:bg-indigo-600 transition-colors duration-300"
               >
                 View Details
               </Link>

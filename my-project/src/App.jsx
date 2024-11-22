@@ -4,9 +4,10 @@ import Home from './components/Home';
 import Navbar from './components/Navbar';
 import CSVUploader from './components/CSVUploader';
 import DatabasePage from './components/DatabasePage';
+import GeneralAPI from './components/GeneralAPI';
 import PhoneSpecsApp from './components/PhoneSpecsApp';
 import PhoneTable from './components/PhoneTable';
-import GeneralAPI from './components/GeneralAPI';
+
 
 
 const App = () => {
@@ -22,8 +23,8 @@ const App = () => {
                     to="/"
                     className={({ isActive }) =>
                       isActive
-                        ? "text-gray-800 dark:text-gray-200 border-b-2 border-blue-500 mx-1.5 sm:mx-6"
-                        : "border-b-2 border-transparent hover:text-gray-800 transition-colors duration-300 transform dark:hover:text-gray-200 hover:border-blue-500 mx-1.5 sm:mx-6"
+                        ? "text-gray-800 dark:text-gray-200 border-b-2 border-indigo-500 mx-1.5 sm:mx-6"
+                        : "border-b-2 border-transparent hover:text-gray-800 transition-colors duration-300 transform dark:hover:text-gray-200 hover:border-indigo-500 mx-1.5 sm:mx-6"
                     }
                   >
                     Home
@@ -34,8 +35,8 @@ const App = () => {
                     to="/upload"
                     className={({ isActive }) =>
                       isActive
-                        ? "text-gray-800 dark:text-gray-200 border-b-2 border-blue-500 mx-1.5 sm:mx-6"
-                        : "border-b-2 border-transparent hover:text-gray-800 transition-colors duration-300 transform dark:hover:text-gray-200 hover:border-blue-500 mx-1.5 sm:mx-6"
+                        ? "text-gray-800 dark:text-gray-200 border-b-2 border-indigo-500 mx-1.5 sm:mx-6"
+                        : "border-b-2 border-transparent hover:text-gray-800 transition-colors duration-300 transform dark:hover:text-gray-200 hover:border-indigo-500 mx-1.5 sm:mx-6"
                     }
                   >
                     Upload CSV
@@ -46,8 +47,8 @@ const App = () => {
                     to="/databases"
                     className={({ isActive }) =>
                       isActive
-                        ? "text-gray-800 dark:text-gray-200 border-b-2 border-blue-500 mx-1.5 sm:mx-6"
-                        : "border-b-2 border-transparent hover:text-gray-800 transition-colors duration-300 transform dark:hover:text-gray-200 hover:border-blue-500 mx-1.5 sm:mx-6"
+                        ? "text-gray-800 dark:text-gray-200 border-b-2 border-indigo-500 mx-1.5 sm:mx-6"
+                        : "border-b-2 border-transparent hover:text-gray-800 transition-colors duration-300 transform dark:hover:text-gray-200 hover:border-indigo-500 mx-1.5 sm:mx-6"
                     }
                   >
                     Manage Databases
@@ -55,11 +56,23 @@ const App = () => {
                 </li>
                 <li>
                   <NavLink
+                    to="/external-api"
+                    className={({ isActive }) =>
+                      isActive
+                        ? "text-gray-800 dark:text-gray-200 border-b-2 border-indigo-500 mx-1.5 sm:mx-6"
+                        : "border-b-2 border-transparent hover:text-gray-800 transition-colors duration-300 transform dark:hover:text-gray-200 hover:border-indigo-500 mx-1.5 sm:mx-6"
+                    }
+                  >
+                    General API
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink
                     to="/phone-specs"
                     className={({ isActive }) =>
                       isActive
-                        ? "text-gray-800 dark:text-gray-200 border-b-2 border-blue-500 mx-1.5 sm:mx-6"
-                        : "border-b-2 border-transparent hover:text-gray-800 transition-colors duration-300 transform dark:hover:text-gray-200 hover:border-blue-500 mx-1.5 sm:mx-6"
+                        ? "text-gray-800 dark:text-gray-200 border-b-2 border-indigo-500 mx-1.5 sm:mx-6"
+                        : "border-b-2 border-transparent hover:text-gray-800 transition-colors duration-300 transform dark:hover:text-gray-200 hover:border-indigo-500 mx-1.5 sm:mx-6"
                     }
                   >
                     Phone Specs
@@ -70,25 +83,14 @@ const App = () => {
                     to="/phones"
                     className={({ isActive }) =>
                       isActive
-                        ? "text-gray-800 dark:text-gray-200 border-b-2 border-blue-500 mx-1.5 sm:mx-6"
-                        : "border-b-2 border-transparent hover:text-gray-800 transition-colors duration-300 transform dark:hover:text-gray-200 hover:border-blue-500 mx-1.5 sm:mx-6"
+                        ? "text-gray-800 dark:text-gray-200 border-b-2 border-indigo-500 mx-1.5 sm:mx-6"
+                        : "border-b-2 border-transparent hover:text-gray-800 transition-colors duration-300 transform dark:hover:text-gray-200 hover:border-indigo-500 mx-1.5 sm:mx-6"
                     }
                   >
                     All Phones
                   </NavLink>
                 </li>
-                <li>
-                  <NavLink
-                    to="/external-api"
-                    className={({ isActive }) =>
-                      isActive
-                        ? "text-gray-800 dark:text-gray-200 border-b-2 border-blue-500 mx-1.5 sm:mx-6"
-                        : "border-b-2 border-transparent hover:text-gray-800 transition-colors duration-300 transform dark:hover:text-gray-200 hover:border-blue-500 mx-1.5 sm:mx-6"
-                    }
-                  >
-                    General API
-                  </NavLink>
-                </li>
+                
               </ul>
             </div>
           </nav>
@@ -98,9 +100,9 @@ const App = () => {
               <Route path="/" element={<Home />} />
               <Route path="/upload" element={<CSVUploader />} />
               <Route path="/databases" element={<DatabasePage />} />
+              <Route path="/external-api" element={<GeneralAPI />} />
               <Route path="/phone-specs" element={<PhoneSpecsApp />} />
               <Route path="/phones" element={<PhoneTable />} />
-              <Route path="/external-api" element={<GeneralAPI />} />
             </Routes>
           </main>
 
