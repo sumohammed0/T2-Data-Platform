@@ -6,6 +6,8 @@ import CSVUploader from './components/CSVUploader';
 import DatabasePage from './components/DatabasePage';
 import PhoneSpecsApp from './components/PhoneSpecsApp';
 import PhoneTable from './components/PhoneTable';
+import GeneralAPI from './components/GeneralAPI';
+
 
 const App = () => {
   return (
@@ -75,6 +77,18 @@ const App = () => {
                     All Phones
                   </NavLink>
                 </li>
+                <li>
+                  <NavLink
+                    to="/external-api"
+                    className={({ isActive }) =>
+                      isActive
+                        ? "text-gray-800 dark:text-gray-200 border-b-2 border-blue-500 mx-1.5 sm:mx-6"
+                        : "border-b-2 border-transparent hover:text-gray-800 transition-colors duration-300 transform dark:hover:text-gray-200 hover:border-blue-500 mx-1.5 sm:mx-6"
+                    }
+                  >
+                    General API
+                  </NavLink>
+                </li>
               </ul>
             </div>
           </nav>
@@ -86,6 +100,7 @@ const App = () => {
               <Route path="/databases" element={<DatabasePage />} />
               <Route path="/phone-specs" element={<PhoneSpecsApp />} />
               <Route path="/phones" element={<PhoneTable />} />
+              <Route path="/external-api" element={<GeneralAPI />} />
             </Routes>
           </main>
 
