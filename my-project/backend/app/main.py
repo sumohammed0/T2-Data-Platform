@@ -87,6 +87,8 @@ async def upload_csv(
 ):
     try:
         contents = await file.read()
+
+        file.file.seek(0) # reset file pointer to start of file
         
         if file: 
             upload_response = s3_client.upload_fileobj(file.file, AWS_S3_BUCKET_NAME, file.filename)
@@ -118,6 +120,7 @@ async def upload_csv(
         return {
             "message": "CSV uploaded and processed successfully",
             "database": database_name,
+            "uploads3response": upload_response,
             "table": table_name,
             "rows": len(df),
             "columns": list(df.columns)
